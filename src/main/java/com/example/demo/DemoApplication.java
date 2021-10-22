@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class DemoApplication {
 
 	@Bean
