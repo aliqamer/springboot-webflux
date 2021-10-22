@@ -21,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -56,14 +57,19 @@ class Client {
 				.uri("/greeting/{name}", name)
 				.retrieve()
 				.bodyToMono(GreetingResponse.class)
-				.subscribe(gr -> log.info("Mono: "+ gr.getMessage()));
+				.map(GreetingResponse::getMessage)
+//				.retry(3)
+				.retryWhen(Retry.backoff(3, Duration.ofSeconds(3)))
+				.onErrorMap(throwable -> new IllegalArgumentException("original exception was " + throwable.toString()+ " wrong! "))
+				.onErrorResume(IllegalArgumentException.class, ex -> Mono.just(ex.toString()))
+				.subscribe(gr -> log.info("Mono: "+ gr));
 
-		this.webClient
+		/*this.webClient
 				.get()
 				.uri("/greetings/{name}", name)
 				.retrieve()
 				.bodyToFlux(GreetingResponse.class)
-				.subscribe(gr -> log.info("Flux: "+ gr.getMessage()));
+				.subscribe(gr -> log.info("Flux: "+ gr.getMessage()));*/
 	}
 }
 // client part end
