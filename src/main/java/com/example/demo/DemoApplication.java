@@ -58,7 +58,6 @@ class Client {
 				.retrieve()
 				.bodyToMono(GreetingResponse.class)
 				.map(GreetingResponse::getMessage)
-//				.retry(3)
 				.retryWhen(Retry.backoff(3, Duration.ofSeconds(3)))
 				.onErrorMap(throwable -> new IllegalArgumentException("original exception was " + throwable.toString()+ " wrong! "))
 				.onErrorResume(IllegalArgumentException.class, ex -> Mono.just(ex.toString()))
