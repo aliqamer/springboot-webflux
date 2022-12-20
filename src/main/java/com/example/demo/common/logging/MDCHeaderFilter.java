@@ -11,7 +11,11 @@ public class MDCHeaderFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 
-        exchange.getResponse().beforeCommit(() -> ContextHelper.addContextToHttpResponseHeaders(exchange.getResponse()));
-        return chain.filter(exchange).contextWrite(context -> ContextHelper.addRequestHeadersToContext(exchange.getRequest(), context));
+        exchange
+                .getResponse()
+                .beforeCommit(() -> ContextHelper.addContextToHttpResponseHeaders(exchange.getResponse()));
+        return chain
+                .filter(exchange)
+                .contextWrite(context -> ContextHelper.addRequestHeadersToContext(exchange.getRequest(), context));
     }
 }

@@ -1,6 +1,6 @@
 <configuration>
 
-    <springProperty scop="context" name="environment" source="spring.environment" />
+    <springProperty scope="context" name="environment" source="spring.environment" />
 
     <springProfile name="default | local">
         <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">

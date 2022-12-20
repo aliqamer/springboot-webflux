@@ -1,15 +1,13 @@
 package com.example.demo.common.logging;
 
+import com.example.demo.model.Employee;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ContextHelper {
@@ -40,5 +38,15 @@ public class ContextHelper {
                             (k, v) -> headers.add(k, v)
                     );
                 }).then();
+    }
+
+    public static Context addRequestBodyToContext(Employee dto, Context ctx) {
+
+        final Map<String, String> contextMap = new HashMap<>();
+
+        if(null != dto.getCorrelationIdFromRequest()){
+            contextMap.put("correlationId", dto.getCorrelationId());
+        }
+        return contextMap.isEmpty() ? ctx : ctx.put(CONTEXT_MAP, contextMap);
     }
 }
