@@ -1,0 +1,21 @@
+<configuration>
+
+    <springProperty scop="context" name="environment" source="spring.environment" />
+
+    <springProfile name="default | local">
+        <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">
+                </provider>
+                <jsonGeneratorDecorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                    <valueMasker class="com.example.demo.common.logging.MaskingPatternLayout" />
+                </jsonGeneratorDecorator>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender" />
+        </root>
+    </springProfile>
+
+</configuration>
